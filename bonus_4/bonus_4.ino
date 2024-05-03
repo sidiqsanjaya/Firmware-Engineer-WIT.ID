@@ -2,15 +2,15 @@
 #include <PubSubClient.h>
 
 // WiFi settings
-const char* ssid = "lolisk";
-const char* password = "akudandiagh0822";
+const char* ssid = "change me";
+const char* password = "change me";
 
 // MQTT settings
-const char* mqtt_server = "103.165.245.156";
+const char* mqtt_server = "change me";
 const int mqtt_port = 1883;
-const char* mqtt_username = "esp8266";
-const char* mqtt_password = "esp";
-const char* mqtt_client_id = "esp8266_client";
+const char* mqtt_username = "change me";
+const char* mqtt_password = "change me";
+const char* mqtt_client_id = "change me";
 
 // Relay settings
 #define RELAY_PIN LED_BUILTIN
@@ -34,7 +34,7 @@ void setup_wifi() {
 }
 
 void callback(char* topic, byte* payload, unsigned int length) {
-  Serial.print("Message arrived [");
+  Serial.print("Message diterima [");
   Serial.print(topic);
   Serial.print("] ");
   for (int i = 0; i < length; i++) {
@@ -42,7 +42,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
   Serial.println();
   
-  // Check if the message is to control the relay
   if (strcmp(topic, "esp8266/relay") == 0) {
     if ((char)payload[0] == '1') {
       digitalWrite(RELAY_PIN, HIGH); // Turn on relay
