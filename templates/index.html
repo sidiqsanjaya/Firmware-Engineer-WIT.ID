@@ -1,0 +1,129 @@
+{% include 'fe/head.html'%}
+
+<style>
+  .clock {
+    text-align: center;
+    color: #000000;
+    font-size: 30px;
+    font-family: Orbitron;
+    letter-spacing: 7px;
+    line-height: 0.9;
+    margin: 0%;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.25rem;
+  padding-top: 15px;
+}
+.yellow {
+  background-color: rgb(250, 250, 94) !important;
+}
+.green {
+  background-color: rgb(113, 252, 113) !important;
+}
+
+</style>
+
+<body>
+  <main id="main2" class="main2">
+    <section class="section dashboard">
+      <div class="row">
+
+        <div class="col-lg-9">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Laporan <span>|Hari ini</span></h5>
+              <canvas id="chartstats"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">device HeartBeat</span></h5>
+              <h5 id="device"></h5>
+              <button type="button" id="button" onclick="relay()" class="btn btn-primary" value="on">ON</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+  </main><!-- End #main -->
+
+  {% include 'fe/footer.html' %}
+  <script>
+    function relay(){
+      button = document.getElementById("button")
+      set = button.value
+      if(set == "on"){
+        button.value = "off"
+        button.classList.remove("btn-primary")
+        button.classList.add("btn-danger")
+        button.innerHTML = "off"
+      }else{
+        button.value = "on"
+        button.classList.remove("btn-danger")
+        button.classList.add("btn-primary")
+        button.innerHTML = "on"
+      }
+      fetch('/api/v1/device?chip_id=15879106&get=relay&set='+set)
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+      let myChart;
+      fetchChartData('/api/v1/device?chip_id=15879106&get=log_sensor');
+
+      function fetchChartData(url) {
+          fetch(url)
+              .then(response => response.json())
+              .then(data => {
+                  // Proses data
+                  const measures = data.map(entry => entry.measure);
+                  const timestamps = data.map((entry, index) => index);
+
+                  const ctx = document.getElementById('chartstats').getContext('2d');
+                  const myChart = new Chart(ctx, {
+                      type: 'line',
+                      data: {
+                          labels: timestamps,
+                          datasets: [{
+                              label: 'Data Sensor',
+                              data: measures,
+                              backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                              borderColor: 'rgba(255, 99, 132, 1)',
+                              borderWidth: 1
+                          }]
+                      },
+                      options: {
+                          scales: {
+                              y: {
+                                  beginAtZero: true
+                              }
+                          }
+                      }
+                  });
+              })
+              .catch(error => console.error('Error fetching data:', error));
+      }
+      
+      setInterval(function () {
+        fetch("/api/v1/device?chip_id=15879106&get=heartbeat")
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('device').innerHTML = data[1];
+        })
+      }, 1000);
+
+
+  });
+  </script>
+
+</body>
+
+</html>
