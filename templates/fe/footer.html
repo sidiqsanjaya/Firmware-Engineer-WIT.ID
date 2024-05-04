@@ -1,0 +1,61 @@
+<!-- ======= Footer ======= -->
+<footer id="footer" class="footer">
+  <div class="copyright">
+    &copy; Copyright <strong><span><a href="https://github.com/sidiqsanjaya">INAdik</a></span></strong>. All Rights Reserved
+  </div>
+</footer><!-- End Footer -->
+<script>
+  if (window.location.pathname == '/'){
+    var footer = document.getElementById('footer');
+    if (footer) {
+      footer.removeAttribute('id');
+    }
+  }
+</script>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js" defer></script>
+<script src="/static/vendor/chart.js/chart.umd.js" defer></script>
+
+<!-- kepake -->
+<script src="/static/vendor/datatables/jquery.dataTables.min.js" defer></script>
+<script src="/static/vendor/datatables/dataTables.buttons.min.js" defer></script>
+<script src="/static/vendor/datatables/buttons.html5.min.js" defer></script>
+<script src="/static/vendor/datatables/jszip.min.js" defer></script>
+<script src="/static/vendor/datatables/pdfmake.min.js" defer></script>
+<script src="/static/vendor/datatables/vfs_fonts.js" defer></script>
+<script src="/static/vendor/datatables/buttons.print.min.js" defer></script>
+<script>
+  // $('body').toggleClass('toggle-sidebar')
+</script>
+<script src="/static/js/main.js" defer></script>
+
+<script>
+  
+  document.addEventListener("DOMContentLoaded", function() {
+    const path = window.location.pathname;
+    const sidebarLinks = document.querySelectorAll("#sidebar-nav a");
+
+    sidebarLinks.forEach(function(link) {
+      const linkPath = link.getAttribute("href");
+      if (path === linkPath) {
+        link.classList.add("active");
+        const parentCollapse = link.closest(".collapse");
+        if (parentCollapse) {
+          parentCollapse.classList.add("show");
+        }
+      }
+    });
+  });
+
+</script>
+
+{% if debug == "PRODUCTION" %}
+<script>
+  window.alert = function() {};
+  window.onerror = function() { return true; }
+  console.log = function() {}
+</script>
+{% endif %}
+
